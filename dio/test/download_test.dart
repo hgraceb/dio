@@ -122,6 +122,7 @@ void main() {
     final File file = File(p.join(directory.path, 'file'));
     file.writeAsBytesSync(List.filled(10, 0));
     final raf = file.openSync(mode: FileMode.write)..lockSync();
+    file.deleteSync();
     raf.unlockSync();
     raf.closeSync();
   });
