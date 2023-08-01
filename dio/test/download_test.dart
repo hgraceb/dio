@@ -102,7 +102,7 @@ void main() {
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
     await expectLater(
-      dio.download('/download', savePath, deleteOnError: false).catchError((e) {
+      dio.download('/download', savePath, deleteOnError: true).catchError((e) {
         throw (e as DioException).error!;
       }),
       throwsA(isA<FileSystemException>()),

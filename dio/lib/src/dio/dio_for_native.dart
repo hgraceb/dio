@@ -141,9 +141,9 @@ class DioForNative with DioMixin implements Dio {
           try {
             await subscription.cancel();
             closed = true;
-            await raf.close();
+            await raf.close().catchError((_) => raf);
             if (deleteOnError && file.existsSync()) {
-              await file.delete();
+              await file.delete().catchError((_) => file);
             }
           } finally {
             completer.completeError(
