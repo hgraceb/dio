@@ -97,7 +97,10 @@ void main() {
   test('download write failed', () async {
     const savePath = 'test/_download_test.md';
     final f = File(savePath)..createSync(recursive: true);
-    final raf = f.openSync(mode: FileMode.write)..lockSync(FileLock.exclusive);
+    final raf = f.openSync(mode: FileMode.write);
+    raf.writeStringSync(savePath);
+    raf.lock(FileLock.exclusive);
+    print('f.readAsStringSync() = ${f.readAsStringSync()}');
     expect(f.existsSync(), isTrue);
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();

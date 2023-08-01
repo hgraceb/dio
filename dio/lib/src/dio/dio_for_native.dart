@@ -130,6 +130,7 @@ class DioForNative with DioMixin implements Dio {
         subscription.pause();
         // Write file asynchronously
         asyncWrite = raf.writeFrom(data).then((result) {
+          print('result = $result');
           // Notify progress
           received += data.length;
           onReceiveProgress?.call(received, total);
@@ -139,6 +140,7 @@ class DioForNative with DioMixin implements Dio {
           }
         }).catchError((Object e) async {
           try {
+            print('catchError = $e');
             await subscription.cancel();
             closed = true;
             await raf.close().catchError((_) => raf);
