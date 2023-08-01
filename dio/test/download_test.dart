@@ -137,7 +137,11 @@ void main() {
     expect(f.existsSync(), isTrue);
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
-    final response = dio.download('/download', savePath, deleteOnError: false);
+    final response = await dio.download(
+      '/download',
+      savePath,
+      deleteOnError: false,
+    );
     print('response = $response');
     print('f.readAsStringSync() = "${f.readAsStringSync()}"');
 
