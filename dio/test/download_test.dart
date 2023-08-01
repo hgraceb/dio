@@ -100,7 +100,7 @@ void main() {
       ..createSync(recursive: true)
       ..writeAsBytesSync(List.filled(10, 0));
     print('f.readAsStringSync() = ${f.readAsStringSync()}');
-    final raf = f.openSync(mode: FileMode.write);
+    final raf = f.openSync(mode: FileMode.append);
     raf.writeFromSync(List.filled(10, 0));
     print('f.readAsStringSync() = ${f.readAsStringSync()}');
     raf.lockSync();
@@ -122,7 +122,7 @@ void main() {
     await expectLater(f.delete(), completes);
   });
 
-  test('download write failed2', () async {
+  test('download lock failed', () async {
     final directory = Directory.systemTemp.createTempSync('dart_file_lock');
     final file = File(p.join(directory.path, 'file'));
     file.writeAsBytesSync(List.filled(10, 0));
