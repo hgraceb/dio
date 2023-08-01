@@ -117,7 +117,8 @@ void main() {
   });
 
   test('download write failed2', () async {
-    final Directory directory = Directory.systemTemp.createTempSync('dart_file_lock');
+    final Directory directory =
+        Directory.systemTemp.createTempSync('dart_file_lock');
     final File file = File(p.join(directory.path, 'file'));
     file.writeAsBytesSync(List.filled(10, 0));
     final raf = file.openSync(mode: FileMode.write)..lockSync();
