@@ -98,8 +98,8 @@ void main() {
     const savePath = 'test/_download_test.md';
     final f = File(savePath)..createSync(recursive: true);
     final raf = f.openSync(mode: FileMode.write);
-    raf.writeStringSync(savePath);
-    raf.lock(FileLock.exclusive);
+    await raf.writeString(savePath);
+    await raf.lock(FileLock.exclusive);
     print('f.readAsStringSync() = ${f.readAsStringSync()}');
     expect(f.existsSync(), isTrue);
 
