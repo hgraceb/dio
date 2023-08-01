@@ -138,7 +138,7 @@ void main() {
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
     final response = dio.download('/download', savePath, deleteOnError: false);
-    print('response = ${response}');
+    print('response = $response');
     print('f.readAsStringSync() = "${f.readAsStringSync()}"');
 
     await expectLater(raf.unlock(), completes);
