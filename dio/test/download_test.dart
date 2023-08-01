@@ -100,7 +100,12 @@ void main() {
       ..createSync(recursive: true)
       ..writeAsBytesSync(List.filled(10, 0));
     print('f.readAsStringSync() = ${f.readAsStringSync()}');
-    final raf = f.openSync(mode: FileMode.write)..lockSync();
+    final raf = f.openSync(mode: FileMode.write);
+    raf.writeFromSync(List.filled(10, 0));
+    print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    raf.lockSync();
+    raf.writeFromSync(List.filled(10, 0));
+    print('f.readAsStringSync() = ${f.readAsStringSync()}');
     expect(f.existsSync(), isTrue);
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
@@ -113,18 +118,19 @@ void main() {
 
     await expectLater(raf.unlock(), completes);
     await expectLater(raf.close(), completes);
+    print('f.readAsStringSync() = ${f.readAsStringSync()}');
     await expectLater(f.delete(), completes);
   });
 
   test('download write failed2', () async {
-    final Directory directory =
-        Directory.systemTemp.createTempSync('dart_file_lock');
-    final File file = File(p.join(directory.path, 'file'));
+    final directory = Directory.systemTemp.createTempSync('dart_file_lock');
+    final file = File(p.join(directory.path, 'file'));
     file.writeAsBytesSync(List.filled(10, 0));
-    final raf = file.openSync(mode: FileMode.write)..lockSync();
+    final raf = file.openSync(mode: FileMode.write);
+    raf.writeFromSync(List.filled(10, 0));
+    raf.lockSync();
+    raf.writeFromSync(List.filled(10, 0));
     file.deleteSync();
-    raf.unlockSync();
-    raf.closeSync();
   });
 
   test('`savePath` types', () async {
