@@ -96,11 +96,11 @@ void main() {
 
   test('download write failed', () async {
     const savePath = 'test/_download_test.md';
-    final f = File(savePath)..createSync(recursive: true);
-    final raf = f.openSync(mode: FileMode.write);
-    await raf.writeString(savePath);
-    await raf.lock(FileLock.exclusive);
+    final f = File(savePath)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(List.filled(10, 0));
     print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    final raf = f.openSync(mode: FileMode.write)..lockSync();
     expect(f.existsSync(), isTrue);
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
@@ -114,6 +114,15 @@ void main() {
     await expectLater(raf.unlock(), completes);
     await expectLater(raf.close(), completes);
     await expectLater(f.delete(), completes);
+  });
+
+  test('download write failed2', () async {
+    final Directory directory = Directory.systemTemp.createTempSync('dart_file_lock');
+    final File file = File(p.join(directory.path, 'file'));
+    file.writeAsBytesSync(List.filled(10, 0));
+    final raf = file.openSync(mode: FileMode.write)..lockSync();
+    raf.unlockSync();
+    raf.closeSync();
   });
 
   test('`savePath` types', () async {
