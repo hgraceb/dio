@@ -119,7 +119,7 @@ class DioForNative with DioMixin implements Dio {
         await asyncWrite;
         await raf.close().catchError((_) => raf);
         if (deleteOnError && file.existsSync()) {
-          await file.delete().catchError((_) => file);
+          print('delete = ${await file.delete().catchError((_) => file)}');
         }
       }
     }

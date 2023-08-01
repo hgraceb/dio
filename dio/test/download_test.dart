@@ -99,13 +99,13 @@ void main() {
     final f = File(savePath)
       ..createSync(recursive: true)
       ..writeAsBytesSync(List.filled(10, 0));
-    print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
     final raf = f.openSync(mode: FileMode.append);
     raf.writeFromSync(List.filled(10, 0));
-    print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
     raf.lockSync();
     raf.writeFromSync(List.filled(10, 0));
-    print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
     expect(f.existsSync(), isTrue);
 
     final dio = Dio()..options.baseUrl = serverUrl.toString();
@@ -115,6 +115,31 @@ void main() {
       }),
       throwsA(isA<FileSystemException>()),
     );
+
+    await expectLater(raf.unlock(), completes);
+    await expectLater(raf.close(), completes);
+    print('f.readAsStringSync() = ${f.readAsStringSync()}');
+    await expectLater(f.delete(), completes);
+  });
+
+  test('download write failed log', () async {
+    const savePath = 'test/_download_test.md';
+    final f = File(savePath)
+      ..createSync(recursive: true)
+      ..writeAsBytesSync(List.filled(10, 0));
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
+    final raf = f.openSync(mode: FileMode.append);
+    raf.writeFromSync(List.filled(10, 0));
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
+    raf.lockSync();
+    raf.writeFromSync(List.filled(10, 0));
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
+    expect(f.existsSync(), isTrue);
+
+    final dio = Dio()..options.baseUrl = serverUrl.toString();
+    final response = dio.download('/download', savePath, deleteOnError: false);
+    print('response = ${response}');
+    print('f.readAsStringSync() = "${f.readAsStringSync()}"');
 
     await expectLater(raf.unlock(), completes);
     await expectLater(raf.close(), completes);
