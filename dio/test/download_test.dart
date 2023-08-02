@@ -94,7 +94,7 @@ void main() {
     );
   });
 
-  test('delete on error', () async {
+  test('delete on data error', () async {
     const savePath = 'test/_download_test.md';
     final f = File(savePath)..createSync(recursive: true);
     expect(f.existsSync(), isTrue);
